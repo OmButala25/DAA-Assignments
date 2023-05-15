@@ -21,21 +21,24 @@ class Philosopher implements Runnable {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            //about interrupt - calling the interrupt() method on the thread, breaks out the sleeping or waiting state throwing InterruptedException. If the thread is not in the sleeping or waiting state, calling the interrupt() method performs normal behaviour and doesn't interrupt the thread but sets the interrupt flag to true
         }
     }
 
     private void think() throws InterruptedException {
         System.out.println(name + " is thinking.");
-        Thread.sleep(1000); // Simulate thinking time
+        Thread.sleep(1000); // Simulate thinking time 1000ml=1sec
     }
 
     private void eat() throws InterruptedException {
         leftChopstick.acquire();
         rightChopstick.acquire();
+        //The method acquire the permits from the semaphore, blocking until one is available, or the thread is interrupted. It reduces the number of available permits by 1.
         System.out.println(name + " is eating.");
         Thread.sleep(1000); // Simulate eating time
         rightChopstick.release();
         leftChopstick.release();
+        //It releases a permit and returns it to the semaphore. It increments the number of available permits by 1. 
     }
 }
 
@@ -44,6 +47,8 @@ public class ConcurrentDiningPhilosopher {
 
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newFixedThreadPool(NUM_PHILOSOPHERS);
+        //Java ExecutorService is the interface which allows us to execute tasks on threads asynchronously.
+        //The newFixedThreadPool() method of Executors class creates a thread pool that reuses a fixed number of threads operating off a shared unbounded queue. At any point, at most n Threads will be active processing tasks. If additional tasks are submitted when all threads are active, they will wait in the queue until a thread is available.
         Semaphore[] chopsticks = new Semaphore[NUM_PHILOSOPHERS];
         for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
             chopsticks[i] = new Semaphore(1);
@@ -78,3 +83,16 @@ public class ConcurrentDiningPhilosopher {
 
 // Note: The program may not terminate automatically in all cases due to the interruption handling. You can adjust the sleep duration or modify the termination condition to meet your requirements.
 
+
+
+
+//Concurrency is the ability to run several programs or several parts of a program in parallel. - concurrent
+//The Java ExecutorService is the interface which allows us to execute tasks on threads asynchronously. The Java ExecutorService interface is present in the java. util. concurrent package. The ExecutorService helps in maintaining a pool of threads and assigns them tasks.
+//provides a way of decoupling task submission from the mechanics of how each task will be run, including details of thread use, scheduling, etc
+
+//An executor is one who handles the wishes and instructions set out in a will. in OS
+
+//Semaphores refer to the integer variables that are primarily used to solve the critical section problem via combining two of the atomic procedures, wait and signal, for the process synchronization.
+//Semaphore is essentially a non-negative integer that is used to solve the critical section problem by acting as a signal.
+//Semaphore in Java is a thread synchronization construct that avoids missed signals between threads by sending signals to the threads and protecting critical sections. With the use of counters, Semaphore manages access to the shared resources.
+//Semaphore is used to restrict the number of threads that can access a resource. That is, while synchronized allows only one thread to aquire lock and execute the synchonized block / method, Semaphore gives permission up to n threads to go and blocks the others.
