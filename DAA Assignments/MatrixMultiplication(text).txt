@@ -101,3 +101,11 @@ The time complexity of the matrix multiplication algorithm implemented is O(N^3)
 In summary, the code generates two random matrices (matA and matB), performs matrix multiplication using multiple threads, and stores the result in matC. The result is then displayed on the console.
 
 Complexity: O(N^3) */
+
+//A thread is a thread of execution in a program. The Java Virtual Machine allows an application to have multiple threads of execution running concurrently. Every thread has a priority. Threads with higher priority are executed in preference to threads with lower priority.
+
+//thread is very light-weighted process
+
+//Threads allows a program to operate more efficiently by doing multiple things at the same time
+
+//thread - a basic unit of CPU utilization, consisting of a program counter, a stack, and a set of registers, ( and a thread ID. a single sequential flow of activities being executed in a process. a single sequential flow of control within a program.
