@@ -1,0 +1,103 @@
+import java.util.Random;
+
+public class MatrixMultiplication {
+    static final int MAX = 4;
+    static final int MAX_THREAD = 4;
+    static int[][] matA = new int[MAX][MAX];
+    static int[][] matB = new int[MAX][MAX];
+    static int[][] matC = new int[MAX][MAX];
+    static int step_i = 0;
+
+    static class Worker implements Runnable {
+        int i;
+
+        Worker(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public void run() {
+            for (int j = 0; j < MAX; j++) {
+                for (int k = 0; k < MAX; k++) {
+                    matC[i][j] += matA[i][k] * matB[k][j];
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Random rand = new Random();
+
+        // Generating random values in matA and matB
+        for (int i = 0; i < MAX; i++) {
+            for (int j = 0; j < MAX; j++) {
+                matA[i][j] = rand.nextInt(10);
+                matB[i][j] = rand.nextInt(10);
+            }
+        }
+
+        // Displaying matA
+        System.out.println("Matrix A");
+        for (int i = 0; i < MAX; i++) {
+            for (int j = 0; j < MAX; j++) {
+                System.out.print(matA[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        // Displaying matB
+        System.out.println("Matrix B");
+        for (int i = 0; i < MAX; i++) {
+            for (int j = 0; j < MAX; j++) {
+                System.out.print(matB[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        // Declaring four threads
+        Thread[] threads = new Thread[MAX_THREAD];
+
+        // Creating four threads, each evaluating its own part
+        for (int i = 0; i < MAX_THREAD; i++) {
+            threads[i] = new Thread(new Worker(step_i++));
+            threads[i].start();
+        }
+
+        // Joining and waiting for all threads to complete
+        for (int i = 0; i < MAX_THREAD; i++) {
+            try {
+                threads[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Displaying the result matrix
+        System.out.println("Multiplication of A and B");
+        for (int i = 0; i < MAX; i++) {
+            for (int j = 0; j < MAX; j++) {
+                System.out.print(matC[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+
+/*The given code performs matrix multiplication using multiple threads in Java. Here's an explanation of the code:
+
+The code starts by defining the matrix size (MAX) and the number of threads to use (MAX_THREAD).
+It declares three matrices (matA, matB, and matC) to hold the input matrices and the result matrix.
+The step_i variable is initialized to 0.
+It defines an inner class called Worker that implements the Runnable interface. Each Worker instance is responsible for computing a portion of the resulting matrix.
+The run method of the Worker class performs the matrix multiplication for the assigned portion of the matrix.
+In the main method, a Random object is created to generate random values for matA and matB.
+Random values are generated and assigned to matA and matB using nested loops.
+The contents of matA and matB are printed to the console.
+An array of Thread objects (threads) is declared to hold the worker threads.
+A loop creates and starts MAX_THREAD worker threads. Each thread is passed an instance of the Worker class with a unique index.
+Another loop is used to join and wait for all threads to complete their execution.
+The resulting matrix matC is printed to the console.
+The time complexity of the matrix multiplication algorithm implemented is O(N^3), where N is the size of the matrix.
+In summary, the code generates two random matrices (matA and matB), performs matrix multiplication using multiple threads, and stores the result in matC. The result is then displayed on the console.
+
+Complexity: O(N^3) */
